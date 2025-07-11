@@ -15,9 +15,8 @@ go mod init <project-name>
 Clone the repo:
 
 ```bash
-git clone <your-repo-url>
-cd <your-project>
-rm -rf ./.git
+git clone https://github.com/gnafhan/intern-go
+cd <intern.go>
 ```
 
 Install the dependencies:
