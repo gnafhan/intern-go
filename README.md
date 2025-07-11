@@ -160,3 +160,77 @@ Contributions are welcome! Please check out the [contributing guide](CONTRIBUTIN
 ## License
 
 [MIT](LICENSE)
+
+## Deployment on Ubuntu VPS
+
+To deploy this application on an Ubuntu VPS, follow these steps:
+
+1. **Run as a System Service**
+   - Use `make start` to run the application. For production, it is recommended to run the app as a systemd service to ensure it stays running and restarts automatically if it crashes.
+   - Example systemd service file (`/etc/systemd/system/intern-go.service`):
+     ```ini
+     [Unit]
+     Description=Intern Go Fiber API
+     After=network.target
+
+     [Service]
+     User=ubuntu
+     WorkingDirectory=/path/to/your/project
+     ExecStart=/usr/bin/make start
+     Restart=always
+     Environment=PATH=/usr/local/bin:/usr/bin:/bin
+     Environment=GO_ENV=production
+
+     [Install]
+     WantedBy=multi-user.target
+     ```
+   - Reload systemd and start the service:
+     ```bash
+     sudo systemctl daemon-reload
+     sudo systemctl enable intern-go
+     sudo systemctl start intern-go
+     ```
+
+2. **Set Up Nginx Reverse Proxy**
+   - Install nginx:
+     ```bash
+     sudo apt update && sudo apt install nginx
+     ```
+   - Configure nginx to proxy requests to your Go app (listening on port 3000):
+     ```nginx
+     server {
+         listen 80;
+         server_name your-domain.com;
+
+         location / {
+             proxy_pass http://localhost:3000;
+             proxy_set_header Host $host;
+             proxy_set_header X-Real-IP $remote_addr;
+             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+             proxy_set_header X-Forwarded-Proto $scheme;
+         }
+     }
+     ```
+   - Test and reload nginx:
+     ```bash
+     sudo nginx -t
+     sudo systemctl reload nginx
+     ```
+
+3. **Enable Free SSL with Certbot**
+   - Install Certbot:
+     ```bash
+     sudo apt install certbot python3-certbot-nginx
+     ```
+   - Obtain and install SSL certificate:
+     ```bash
+     sudo certbot --nginx -d your-domain.com
+     ```
+   - Certbot will automatically configure SSL in your nginx config and set up auto-renewal.
+
+4. **Deployment Link**
+   - The API documentation is deployed and available at: [https://intern-go.nafhan.com/v1/docs/index.html](https://intern-go.nafhan.com/v1/docs/index.html)
+
+---
+
+*Deployment instructions are provided for running the API securely and reliably in a production environment using Ubuntu VPS, systemd, nginx, and free SSL from Let's Encrypt.*
