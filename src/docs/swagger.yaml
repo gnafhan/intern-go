@@ -1,0 +1,646 @@
+basePath: /v1
+definitions:
+  example.BadRequest:
+    properties:
+      code:
+        example: 400
+        type: integer
+      message:
+        example: Bad request
+        type: string
+      status:
+        example: error
+        type: string
+    type: object
+  example.CategoryExample:
+    properties:
+      created_at:
+        example: "2025-01-01T00:00:00Z"
+        type: string
+      id:
+        example: fake id
+        type: string
+      name:
+        example: fake name
+        type: string
+      updated_at:
+        example: "2025-01-01T00:00:00Z"
+        type: string
+    type: object
+  example.CreateCategoryResponse:
+    properties:
+      data:
+        $ref: '#/definitions/example.CategoryExample'
+      message:
+        example: Category created successfully
+        type: string
+      status:
+        example: success
+        type: string
+    type: object
+  example.DeleteCategoryResponse:
+    properties:
+      message:
+        example: Category deleted successfully
+        type: string
+      status:
+        example: success
+        type: string
+    type: object
+  example.GetCategoriesResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/example.CategoryExample'
+        type: array
+      message:
+        example: Categories retrieved successfully
+        type: string
+      status:
+        example: success
+        type: string
+      total:
+        example: 100
+        type: integer
+    type: object
+  example.GetCategoryByIDResponse:
+    properties:
+      data:
+        $ref: '#/definitions/example.CategoryExample'
+      message:
+        example: Category retrieved successfully
+        type: string
+      status:
+        example: success
+        type: string
+    type: object
+  example.HealthCheck:
+    properties:
+      is_up:
+        example: true
+        type: boolean
+      name:
+        example: Postgre
+        type: string
+      status:
+        example: Up
+        type: string
+    type: object
+  example.HealthCheckError:
+    properties:
+      is_up:
+        example: false
+        type: boolean
+      message:
+        example: 'failed to connect to ''host=localhost user=postgres database=wrongdb'':
+          server error (FATAL: database "wrongdb" does not exist (SQLSTATE 3D000))'
+        type: string
+      name:
+        example: Postgre
+        type: string
+      status:
+        example: Down
+        type: string
+    type: object
+  example.HealthCheckResponse:
+    properties:
+      code:
+        example: 200
+        type: integer
+      is_healthy:
+        example: true
+        type: boolean
+      message:
+        example: Health check completed
+        type: string
+      result:
+        items:
+          $ref: '#/definitions/example.HealthCheck'
+        type: array
+      status:
+        example: success
+        type: string
+    type: object
+  example.HealthCheckResponseError:
+    properties:
+      code:
+        example: 500
+        type: integer
+      is_healthy:
+        example: false
+        type: boolean
+      message:
+        example: Health check completed
+        type: string
+      result:
+        items:
+          $ref: '#/definitions/example.HealthCheckError'
+        type: array
+      status:
+        example: error
+        type: string
+    type: object
+  example.InternalServerError:
+    properties:
+      code:
+        example: 500
+        type: integer
+      message:
+        example: Internal server error
+        type: string
+      status:
+        example: error
+        type: string
+    type: object
+  example.NotFound:
+    properties:
+      code:
+        example: 404
+        type: integer
+      message:
+        example: Not found
+        type: string
+      status:
+        example: error
+        type: string
+    type: object
+  example.UpdateCategoryResponse:
+    properties:
+      data:
+        $ref: '#/definitions/example.CategoryExample'
+      message:
+        example: Category updated successfully
+        type: string
+      status:
+        example: success
+        type: string
+    type: object
+  response.CategorySimple:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  response.ErrorResponse:
+    properties:
+      code:
+        type: integer
+      errors: {}
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  response.TaskCreateResponse:
+    properties:
+      data:
+        $ref: '#/definitions/response.TaskResponse'
+      message:
+        type: string
+    type: object
+  response.TaskDeleteResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  response.TaskDetailResponse:
+    properties:
+      data:
+        $ref: '#/definitions/response.TaskResponse'
+      message:
+        type: string
+    type: object
+  response.TaskListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/response.TaskResponse'
+        type: array
+      message:
+        type: string
+      total:
+        type: integer
+    type: object
+  response.TaskResponse:
+    properties:
+      category:
+        $ref: '#/definitions/response.CategorySimple'
+      category_id:
+        type: string
+      created_at:
+        type: string
+      deadline:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      priority:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  response.TaskUpdateResponse:
+    properties:
+      data:
+        $ref: '#/definitions/response.TaskResponse'
+      message:
+        type: string
+    type: object
+  validation.CreateCategory:
+    properties:
+      name:
+        example: fake name
+        maxLength: 50
+        type: string
+    required:
+    - name
+    type: object
+  validation.CreateTask:
+    properties:
+      category_id:
+        example: fake category id
+        type: string
+      deadline:
+        example: "2025-01-01T00:00:00Z"
+        type: string
+      description:
+        example: fake description
+        maxLength: 255
+        type: string
+      priority:
+        enum:
+        - low
+        - medium
+        - high
+        example: low
+        type: string
+      title:
+        example: fake title
+        maxLength: 50
+        type: string
+    required:
+    - category_id
+    - deadline
+    - description
+    - priority
+    - title
+    type: object
+  validation.UpdateCategory:
+    properties:
+      name:
+        example: fake name
+        maxLength: 50
+        type: string
+    required:
+    - name
+    type: object
+  validation.UpdateTask:
+    properties:
+      category_id:
+        example: fake category id
+        type: string
+      deadline:
+        example: "2025-01-01T00:00:00Z"
+        type: string
+      description:
+        example: fake description
+        maxLength: 255
+        type: string
+      priority:
+        enum:
+        - low
+        - medium
+        - high
+        example: medium
+        type: string
+      title:
+        example: fake title
+        maxLength: 50
+        type: string
+    type: object
+host: localhost:3000
+info:
+  contact: {}
+  title: API documentation
+  version: 1.0.0
+paths:
+  /categories:
+    get:
+      description: Retrieve all categories.
+      parameters:
+      - default: 0
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Maximum number of categories
+        in: query
+        name: limit
+        type: integer
+      - description: Search by name
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/example.GetCategoriesResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/example.InternalServerError'
+      summary: Get all categories
+      tags:
+      - Categories
+    post:
+      description: Create a category.
+      parameters:
+      - description: Category
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/validation.CreateCategory'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/example.CreateCategoryResponse'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/example.BadRequest'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/example.InternalServerError'
+      summary: Create a category
+      tags:
+      - Categories
+  /categories/{categoryId}:
+    delete:
+      description: Delete a category.
+      parameters:
+      - description: Category ID
+        in: path
+        name: categoryId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/example.DeleteCategoryResponse'
+        "404":
+          description: Category not found
+          schema:
+            $ref: '#/definitions/example.NotFound'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/example.InternalServerError'
+      summary: Delete a category
+      tags:
+      - Categories
+    get:
+      description: Retrieve a category by ID.
+      parameters:
+      - description: Category ID
+        in: path
+        name: categoryId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/example.GetCategoryByIDResponse'
+        "404":
+          description: Category not found
+          schema:
+            $ref: '#/definitions/example.NotFound'
+      summary: Get a category by ID
+      tags:
+      - Categories
+    put:
+      description: Update a category.
+      parameters:
+      - description: Category ID
+        in: path
+        name: categoryId
+        required: true
+        type: string
+      - description: Category
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/validation.UpdateCategory'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/example.UpdateCategoryResponse'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/example.BadRequest'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/example.InternalServerError'
+      summary: Update a category
+      tags:
+      - Categories
+  /health-check:
+    get:
+      consumes:
+      - application/json
+      description: Check the status of services and database connections
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/example.HealthCheckResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/example.HealthCheckResponseError'
+      summary: Health Check
+      tags:
+      - Health
+  /tasks:
+    get:
+      description: Retrieve all tasks.
+      parameters:
+      - default: 0
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Maximum number of tasks
+        in: query
+        name: limit
+        type: integer
+      - description: Search by title or description
+        in: query
+        name: search
+        type: string
+      - description: Sort by field (created_at, updated_at, deadline, priority, title)
+        in: query
+        name: sort_by
+        type: string
+      - description: Sort order (asc, desc)
+        in: query
+        name: sort_order
+        type: string
+      - description: Filter by priority (low, medium, high)
+        in: query
+        name: priority
+        type: string
+      - description: Filter by category_id (UUID)
+        in: query
+        name: category_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.TaskListResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Get all tasks
+      tags:
+      - Tasks
+    post:
+      description: Create a task.
+      parameters:
+      - description: Task
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/validation.CreateTask'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.TaskCreateResponse'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Create a task
+      tags:
+      - Tasks
+  /tasks/{taskId}:
+    delete:
+      description: Delete a task.
+      parameters:
+      - description: Task ID
+        in: path
+        name: taskId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.TaskDeleteResponse'
+        "404":
+          description: Task not found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Delete a task
+      tags:
+      - Tasks
+    get:
+      description: Retrieve a task by ID.
+      parameters:
+      - description: Task ID
+        in: path
+        name: taskId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.TaskDetailResponse'
+        "404":
+          description: Task not found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Get a task by ID
+      tags:
+      - Tasks
+    put:
+      description: Update a task.
+      parameters:
+      - description: Task ID
+        in: path
+        name: taskId
+        required: true
+        type: string
+      - description: Task
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/validation.UpdateTask'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.TaskUpdateResponse'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Update a task
+      tags:
+      - Tasks
+swagger: "2.0"
